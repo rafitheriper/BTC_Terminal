@@ -9,7 +9,7 @@ import threading
 from datetime import datetime, timedelta
 import os
 import sys
-from typing import Dict, Optional, Any, List
+from typing import Dict, Optional, Any, List, Tuple
 import logging
 from dataclasses import dataclass, field
 from enum import Enum
@@ -75,8 +75,165 @@ class MarketData:
     ma_long: float
     candle_history: List[Candle] = field(default_factory=list)
 
+# --- NEW: AI Engine ---
+class AIEngine:
+    """
+    Handles all AI-related logic, including rule-based predictions
+    and simulating calls to an external AI model like Gemini.
+    """
+    def __init__(self):
+        logger.info("AI Engine initialized.")
+
+    def get_prediction(self, market_data: MarketData, use_gemini: bool) -> Tuple[str, str, float, str]:
+        """
+        Main prediction method. Decides whether to use Gemini or the internal rules engine.
+
+        Returns:
+            A tuple of (signal, reasoning, confidence, ai_source).
+        """
+        if use_gemini:
+            # This is where you would place the actual call to the Gemini API.
+            # For now, it simulates the call and a sophisticated response.
+            signal, reasoning, confidence = self._get_gemini_prediction(market_data)
+            return signal, reasoning, confidence, "Gemini_AI_Simulated"
+        else:
+            signal, reasoning, confidence = self._get_rules_based_prediction(market_data)
+            return signal, reasoning, confidence, "Rules_Engine_v2"
+
+    def _get_rules_based_prediction(self, data: MarketData) -> Tuple[str, str, float]:
+        """
+        A more sophisticated rules-based engine using a scoring system.
+        """
+        bullish_score = 0
+        bearish_score = 0
+        reasons = []
+
+        # 1. MACD Analysis
+        if data.macd > data.macd_signal:
+            bullish_score += 1.5
+            reasons.append("Bullish MACD crossover.")
+        elif data.macd < data.macd_signal:
+            bearish_score += 1.5
+            reasons.append("Bearish MACD crossover.")
+
+        # 2. RSI Analysis
+        if data.rsi < 30:
+            bullish_score += 1
+            reasons.append(f"RSI is oversold ({data.rsi:.1f}).")
+        elif data.rsi > 70:
+            bearish_score += 1
+            reasons.append(f"RSI is overbought ({data.rsi:.1f}).")
+
+        # 3. Moving Average Analysis
+        if data.price > data.ma_short > 0:
+            bullish_score += 1
+            reasons.append("Price is above the short-term MA.")
+        elif data.price < data.ma_short > 0:
+            bearish_score += 1
+            reasons.append("Price is below the short-term MA.")
+        
+        if data.price > data.ma_long > 0:
+            bullish_score += 0.5 # Long-term trend confirmation
+            reasons.append("Price is above the long-term MA (long-term uptrend).")
+        elif data.price < data.ma_long > 0:
+            bearish_score += 0.5
+            reasons.append("Price is below the long-term MA (long-term downtrend).")
+
+        # 4. ADX Trend Strength Analysis
+        is_trending = data.adx > 25
+        if is_trending:
+            bullish_score *= 1.2 # Amplify score in a strong trend
+            bearish_score *= 1.2
+            reasons.append(f"Market is trending strongly (ADX: {data.adx:.1f}).")
+        else:
+            reasons.append(f"Market is ranging or trend is weak (ADX: {data.adx:.1f}).")
+        
+        # Determine final signal
+        if bullish_score > bearish_score and bullish_score >= 2.0:
+            signal = "BUY CALL"
+        elif bearish_score > bullish_score and bearish_score >= 2.0:
+            signal = "BUY PUT"
+        else:
+            signal = "HOLD"
+        
+        # Calculate confidence
+        total_score = max(bullish_score, bearish_score)
+        confidence = min(0.5 + (total_score / 8.0), 0.95) if signal != "HOLD" else 0.5
+        
+        final_reasoning = f"Decision: {signal}. " + " ".join(reasons)
+        if signal == "HOLD":
+            final_reasoning = "Decision: HOLD. Signals are mixed or not strong enough to enter a trade. " + " ".join(reasons)
+            
+        return signal, final_reasoning, confidence
+
+    def _get_gemini_prediction(self, data: MarketData) -> Tuple[str, str, float]:
+        """
+        Simulates creating a prompt for and receiving a response from Gemini.
+        
+        *** DEVELOPER NOTE ***
+        To make this real, you would:
+        1. Import the google.generativeai library.
+        2. Configure it with your API key from APIKeyManager.
+        3. Create a model instance: `model = genai.GenerativeModel('gemini-pro')`
+        4. Send the `prompt` string to the model: `response = model.generate_content(prompt)`
+        5. Parse the `response.text` (which should be in JSON format as requested by the prompt)
+           to extract the signal, reasoning, and confidence.
+        6. Add error handling for API failures.
+        """
+        
+        # Step 1: Construct the detailed prompt
+        candle_history_str = "\n".join([f" - T-{len(data.candle_history)-i}: O={c.open:.2f} H={c.high:.2f} L={c.low:.2f} C={c.close:.2f}" for i, c in enumerate(data.candle_history[-10:])])
+        prompt = f"""
+You are a world-class financial analyst specializing in short-term binary options trading on the BTC/USDT pair.
+Your task is to analyze the provided market data and determine whether to issue a 'BUY CALL' (price will go up), 'BUY PUT' (price will go down), or 'HOLD' (unclear signal) for the next 60 seconds.
+
+Analyze the following data points:
+- Current Price: {data.price:.2f}
+- Technical Indicators:
+  - RSI (14): {data.rsi:.2f} (Suggests overbought >70, oversold <30)
+  - ADX (14): {data.adx:.2f} (Measures trend strength. >25 is a strong trend)
+  - MACD Line: {data.macd:.4f}
+  - MACD Signal Line: {data.macd_signal:.4f}
+  - Moving Average (Short, 20): {data.ma_short:.2f}
+  - Moving Average (Long, 100): {data.ma_long:.2f}
+- Last 10 Candles (Open, High, Low, Close):
+{candle_history_str}
+
+Based on your analysis of the confluence of these indicators, provide your response in a strict JSON format. Do not include any other text or explanations outside of the JSON structure.
+
+Your JSON response must contain three fields:
+1. "signal": Your final decision, which must be one of "BUY CALL", "BUY PUT", or "HOLD".
+2. "confidence": Your confidence in this prediction, as a float between 0.0 and 1.0.
+3. "reasoning": A concise, expert explanation for your decision, referencing specific data points.
+
+Example Response:
+{{
+  "signal": "BUY CALL",
+  "confidence": 0.85,
+  "reasoning": "A strong bullish signal is observed. The MACD has just crossed above its signal line while the RSI at 45 is showing upward momentum without being overbought. The price is holding firmly above the short-term MA, and the ADX at 28 confirms a developing uptrend."
+}}
+
+Now, provide your analysis for the current data.
+"""
+        logger.info("Simulating Gemini API call with the following prompt length: " + str(len(prompt)))
+        
+        # Step 2: Simulate a sophisticated response (this part is replaced by the real API call)
+        # This simulated logic is based on the enhanced rules engine for a realistic mock response.
+        signal, reasoning, confidence = self._get_rules_based_prediction(data)
+        
+        # Add more "LLM-like" flair to the reasoning
+        if signal == "BUY CALL":
+            reasoning = f"A bullish confluence is detected. The MACD crossover suggests upward momentum, supported by the price maintaining its position above key moving averages. With an ADX of {data.adx:.1f}, any trend has strength behind it. RSI at {data.rsi:.1f} indicates room for further upside before becoming overbought."
+        elif signal == "BUY PUT":
+            reasoning = f"A bearish outlook is warranted. The MACD has crossed below its signal line, a classic bearish indicator. This is compounded by the price trading below its short-term MA. The RSI at {data.rsi:.1f} is not yet oversold, suggesting the downward move could continue."
+        else:
+            reasoning = f"A neutral stance is advised. Conflicting signals prevent a high-conviction trade. While the MACD might suggest a direction, the RSI ({data.rsi:.1f}) is neutral and the weak ADX ({data.adx:.1f}) indicates a lack of a discernible trend. It's prudent to wait for a clearer market structure."
+
+        return signal, reasoning, confidence
+
 # --- API Key Manager ---
 class APIKeyManager:
+    # (No changes to this class)
     def __init__(self):
         self.config_file = "api_config.json"
         self.api_key = None
@@ -227,21 +384,24 @@ Your API key will be stored securely on your device."""
 class ProAITradingTerminal(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.title("🚀 Pro AI Trading Terminal v16.6 (Rate Limit Aware)")
+        self.title("🚀 Pro AI Trading Terminal v17.0 (Enhanced AI Engine)")
         self.geometry("1400x950")
         self.minsize(1200, 850)
 
         self.UI_UPDATE_RATE_MS = 100
         self.automation_active = threading.Event()
 
+        # --- MODIFIED: Instantiate Managers ---
         self.api_manager = APIKeyManager()
+        self.ai_engine = AIEngine() # New AI Engine
+
         self.latest_market_data: Optional[MarketData] = None
         self.last_prediction_info: Optional[PredictionInfo] = None
         self.trade_history: Dict[str, PredictionInfo] = {}
         self.chart_indicators = [] 
         self.api_warning_shown = False
 
-        # --- NEW: Rate Limit Tracking ---
+        # --- Rate Limit Tracking ---
         self.gemini_request_count = 0
         self.gemini_limit_reached = False
         self.gemini_cooldown_end_time: Optional[datetime] = None
@@ -328,7 +488,7 @@ class ProAITradingTerminal(tk.Tk):
         self.on_mode_change()
 
     def show_about(self):
-        messagebox.showinfo("About", "Pro AI Trading Terminal v16.6 (Rate Limit Aware)\n\n- Automatically detects (simulated) API rate limits.\n- Falls back to Mock AI during a cooldown period.\n- New API status indicator in the status bar.")
+        messagebox.showinfo("About", "Pro AI Trading Terminal v17.0 (Enhanced AI Engine)\n\n- Encapsulated AI logic in a new AIEngine class.\n- Advanced rule-based engine with a scoring system.\n- Realistic simulation of Gemini LLM calls with expert-level prompts.")
 
     def _create_chart_panel(self, parent):
         ttk.Label(parent, text="📈 Live Candlestick Chart (BTC/USDT)", style="SubHeader.TLabel").pack(anchor="w", pady=(0, 10))
@@ -549,7 +709,7 @@ class ProAITradingTerminal(tk.Tk):
         self.status_var = tk.StringVar(value="Ready")
         ttk.Label(frame, textvariable=self.status_var, anchor="w").pack(side=tk.LEFT, fill=tk.X, expand=True, padx=5)
         
-        # --- NEW: API Status Label ---
+        # --- API Status Label ---
         self.api_status_label = ttk.Label(frame, text="API: --", font=("Segoe UI", 10, "bold"), anchor="e")
         self.api_status_label.pack(side=tk.RIGHT, padx=10)
 
@@ -577,7 +737,7 @@ class ProAITradingTerminal(tk.Tk):
         
         elif mode in [OperatingMode.AI_PREDICTION.value, OperatingMode.PAPER_TRADING.value]:
             if not self.api_manager.is_configured() and not self.api_warning_shown:
-                messagebox.showwarning("API Key Required", "The selected mode will run with Mock AI because a Gemini API key is not configured.")
+                messagebox.showwarning("API Key Required", "The selected mode will run with the advanced Rules Engine because a Gemini API key is not configured.")
                 self.api_warning_shown = True
             
             if mode == OperatingMode.AI_PREDICTION.value:
@@ -596,11 +756,11 @@ class ProAITradingTerminal(tk.Tk):
     def _update_api_status_ui(self):
         """Updates the API status label in the status bar based on current state."""
         if not self.api_manager.is_configured():
-            self.api_status_label.config(text="API: MOCK AI (Manual) 🔵", foreground="#64b5f6")
+            self.api_status_label.config(text="API: Rules Engine 🔵", foreground="#64b5f6")
         elif self.gemini_limit_reached:
-            self.api_status_label.config(text="API: MOCK AI (Limit?) 🟡", foreground="#ffc107")
+            self.api_status_label.config(text="API: Rules Engine (Limit) 🟡", foreground="#ffc107")
         else:
-            self.api_status_label.config(text="API: Gemini AI 🟢", foreground="#26a69a")
+            self.api_status_label.config(text="API: Gemini (Sim) 🟢", foreground="#26a69a")
 
     def toggle_automation(self):
         if self.automation_active.is_set():
@@ -673,25 +833,37 @@ class ProAITradingTerminal(tk.Tk):
         threading.Thread(target=self._get_and_display_prediction, daemon=True).start()
 
     def _get_and_display_prediction(self):
-        time.sleep(1)
+        time.sleep(1) # Simulate network latency for AI call
         
-        # --- MODIFIED: Check for rate limit and cooldown ---
-        use_gemini = self.api_manager.is_configured()
-        if use_gemini:
+        # --- MODIFIED: Simplified logic for using Gemini ---
+        should_use_gemini = self.api_manager.is_configured()
+        
+        if should_use_gemini:
+            # Rate limit check
             if self.gemini_limit_reached:
                 if datetime.now() < self.gemini_cooldown_end_time:
-                    use_gemini = False # Stay on Mock AI during cooldown
-                else:
-                    # Cooldown finished, reset and try Gemini again
+                    should_use_gemini = False # Cooldown active, fallback to rules
+                else: # Cooldown finished, reset and use Gemini again
                     self.gemini_limit_reached = False
                     self.gemini_request_count = 0
                     self.after(0, self._update_api_status_ui)
                     logger.info("Gemini API cooldown finished. Resuming with Gemini AI.")
+            
+            # Rate limit trigger
+            if should_use_gemini:
+                self.gemini_request_count += 1
+                if self.gemini_request_count > GEMINI_REQUEST_LIMIT:
+                    logger.warning("Gemini API request limit reached. Falling back to Rules Engine.")
+                    self.gemini_limit_reached = True
+                    self.gemini_cooldown_end_time = datetime.now() + timedelta(seconds=GEMINI_COOLDOWN_SECONDS)
+                    self.after(0, self._update_api_status_ui)
+                    self.after(0, self._update_coach_tip, f"⚠️ Gemini API limit simulated. Switched to Rules Engine for {GEMINI_COOLDOWN_SECONDS}s.", "warning")
+                    should_use_gemini = False # Fallback for this specific call
 
-        signal, reasoning, ai_source = self._get_gemini_ai_prediction() if use_gemini else self._get_mock_prediction()
+        # --- MODIFIED: Call the AIEngine ---
+        signal, reasoning, confidence, ai_source = self.ai_engine.get_prediction(self.latest_market_data, should_use_gemini)
         
-        mock_response = {"signal": signal, "confidence": np.random.uniform(0.7, 0.95), "reasoning": reasoning}
-        
+        # --- The rest of the logic remains largely the same ---
         capital_before, trade_amount = None, None
         if self.operating_mode.get() == OperatingMode.PAPER_TRADING.value:
             try:
@@ -705,46 +877,16 @@ class ProAITradingTerminal(tk.Tk):
                 return
 
         self.last_prediction_info = PredictionInfo(
-            trade_id=datetime.now().isoformat(), signal=mock_response["signal"], confidence=mock_response["confidence"],
-            reasoning=mock_response["reasoning"], price_at_prediction=self.latest_market_data.price,
+            trade_id=datetime.now().isoformat(), signal=signal, confidence=confidence,
+            reasoning=reasoning, price_at_prediction=self.latest_market_data.price,
             timestamp=datetime.now(), expiry_time=datetime.now() + timedelta(minutes=1),
             AI_Source=ai_source,
             capital_before_trade=capital_before, trade_amount=trade_amount
         )
         
         self.trade_history[self.last_prediction_info.trade_id] = self.last_prediction_info
-        self.after(0, self._display_prediction_result, mock_response)
+        self.after(0, self._display_prediction_result)
 
-    def _get_base_prediction(self, ai_name=""):
-        data = self.latest_market_data
-        if data.macd > data.macd_signal and data.rsi < 70 and data.price > data.ma_short > 0:
-            signal = "BUY CALL"
-            reasoning = f"{ai_name} Bullish confluence. MACD crossover, RSI at {data.rsi:.1f}, price above short-term MA."
-        elif data.macd < data.macd_signal and data.rsi > 30 and data.price < data.ma_short > 0:
-            signal = "BUY PUT"
-            reasoning = f"{ai_name} Bearish confluence. MACD crossover, RSI at {data.rsi:.1f}, price below short-term MA."
-        else:
-            signal = "HOLD"
-            reasoning = f"{ai_name} Mixed signals. RSI at {data.rsi:.1f}. Waiting for clearer market structure."
-        return signal, reasoning
-
-    def _get_gemini_ai_prediction(self):
-        self.gemini_request_count += 1
-        if self.gemini_request_count > GEMINI_REQUEST_LIMIT:
-            logger.warning("Gemini API request limit reached. Falling back to Mock AI.")
-            self.gemini_limit_reached = True
-            self.gemini_cooldown_end_time = datetime.now() + timedelta(seconds=GEMINI_COOLDOWN_SECONDS)
-            self.after(0, self._update_api_status_ui)
-            self.after(0, self._update_coach_tip, f"⚠️ Gemini API limit may be reached. Switched to Mock AI for {GEMINI_COOLDOWN_SECONDS}s.", "warning")
-            return (*self._get_mock_prediction(), "Mock_AI_Fallback") # Fallback for this call
-        
-        signal, reasoning = self._get_base_prediction("Gemini AI")
-        return signal, reasoning, "Gemini_AI"
-
-    def _get_mock_prediction(self):
-        signal, reasoning = self._get_base_prediction("Mock AI")
-        return signal, reasoning, "Mock_AI"
-    
     def update_ui(self):
         if self.automation_active.is_set():
             if self.operating_mode.get() in [OperatingMode.AI_PREDICTION.value, OperatingMode.PAPER_TRADING.value]:
@@ -832,17 +974,18 @@ class ProAITradingTerminal(tk.Tk):
         line = self.chart_canvas.create_line(x, y_pred, w, y_pred, fill=color, width=1, dash=(3, 3))
         self.chart_indicators.extend([poly, text, line])
 
-    def _display_prediction_result(self, data):
-        self.prediction_label.config(text=data['signal'].replace(" ", "\n"))
-        self.confidence_label.config(text=f"Confidence: {data['confidence']:.0%}")
+    def _display_prediction_result(self):
+        info = self.last_prediction_info
+        self.prediction_label.config(text=info.signal.replace(" ", "\n"))
+        self.confidence_label.config(text=f"Confidence: {info.confidence:.0%}")
         
-        tip = data['reasoning']
-        if self.last_prediction_info.trade_amount is not None:
-            payout = self.last_prediction_info.trade_amount * (self.paper_payout_percent.get() / 100.0)
-            tip += f"\n\nPAPER TRADING: Risking ${self.last_prediction_info.trade_amount:,.2f} to win ${payout:,.2f}."
+        tip = info.reasoning
+        if info.trade_amount is not None:
+            payout = info.trade_amount * (self.paper_payout_percent.get() / 100.0)
+            tip += f"\n\nPAPER TRADING: Risking ${info.trade_amount:,.2f} to win ${payout:,.2f}."
         
         self._update_coach_tip(tip, "info")
-        self._update_trade_history_tree(self.last_prediction_info, is_new=True)
+        self._update_trade_history_tree(info, is_new=True)
         self._update_performance_summary()
         self._update_price_chart()
 
@@ -863,20 +1006,24 @@ class ProAITradingTerminal(tk.Tk):
 
                 if info.trade_amount is not None:
                     pnl = 0.0
-                    if result == PredictionStatus.HIT:
-                        pnl = info.trade_amount * (self.paper_payout_percent.get() / 100.0)
-                        self._update_coach_tip(f"✅ TRADE HIT! Profit: ${pnl:+.2f}", "profit")
-                    elif result == PredictionStatus.MISS:
-                        pnl = -info.trade_amount
-                        self._update_coach_tip(f"❌ TRADE MISS! Loss: ${pnl:,.2f}", "loss")
-                    
-                    info.pnl = pnl
-                    new_balance = info.capital_before_trade + pnl
-                    info.capital_after_trade = new_balance
-                    
-                    self.paper_balance.set(new_balance)
-                    self.after(0, self._on_paper_config_change)
-                    self.after(0, self._toggle_paper_controls, 'normal')
+                    try:
+                        payout_rate = self.paper_payout_percent.get() / 100.0
+                        if result == PredictionStatus.HIT:
+                            pnl = info.trade_amount * payout_rate
+                            self._update_coach_tip(f"✅ TRADE HIT! Profit: ${pnl:+.2f}", "profit")
+                        elif result == PredictionStatus.MISS:
+                            pnl = -info.trade_amount
+                            self._update_coach_tip(f"❌ TRADE MISS! Loss: ${pnl:,.2f}", "loss")
+                        
+                        info.pnl = pnl
+                        new_balance = info.capital_before_trade + pnl
+                        info.capital_after_trade = new_balance
+                        
+                        self.paper_balance.set(new_balance)
+                        self.after(0, self._on_paper_config_change)
+                        self.after(0, self._toggle_paper_controls, 'normal')
+                    except (ValueError, TclError):
+                        logger.error("Error calculating P&L due to invalid paper settings.")
 
                 self._update_trade_history_tree(info)
                 self._update_performance_summary()
