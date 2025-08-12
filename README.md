@@ -52,11 +52,10 @@ A next-generation desktop trading terminal built with Python and Tkinter, delive
 
 ## Screenshots
 
-> *(Place your screenshots here)*
 
-![Screenshot 1](<img width="1918" height="1031" alt="Image" src="https://github.com/user-attachments/assets/48a39d5d-f6c0-4b11-9fb2-cff923bf5fa1" />
-)
-![Screenshot 2](<img width="1919" height="1032" alt="Image" src="https://github.com/user-attachments/assets/b965409e-ae74-4fd2-b560-d3a5c7878350" />)
+
+<img width="1918" height="1031" alt="Image" src="https://github.com/user-attachments/assets/48a39d5d-f6c0-4b11-9fb2-cff923bf5fa1" />
+<img width="1919" height="1032" alt="Image" src="https://github.com/user-attachments/assets/b965409e-ae74-4fd2-b560-d3a5c7878350" />
 
 ---
 
