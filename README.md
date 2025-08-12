@@ -129,16 +129,6 @@ pip install pandas numpy
 
 ---
 
-## Project Structure
-
-```
-trading_terminal.py    # Main app file
-trade_log.csv          # Auto-generated trade history
-README.md              # Documentation
-```
-
----
-
 ## Configuration
 
 * Refresh Rate: 2 seconds
