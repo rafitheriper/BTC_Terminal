@@ -76,30 +76,30 @@ python btc_terminal.py
 *Witness the power of darkness in action...*
 
 ### **🖥️ Main Terminal Interface**
-![BTC Terminal Main Interface]_<img width="1387" height="965" alt="Image" src="https://github.com/user-attachments/assets/284e903e-bd84-4654-b9e5-9616b2335aa6" />
+<img width="1387" height="965" alt="Image" src="https://github.com/user-attachments/assets/284e903e-bd84-4654-b9e5-9616b2335aa6" />
 *The complete trading dashboard with live charts, AI predictions, and market analytics*
 
 ### **🤖 AI Prediction Engine**
-![AI Prediction Engine]_<img width="1199" height="1034" alt="Image" src="https://github.com/user-attachments/assets/57d9d032-6b8f-40be-966d-1e8f36d74df8" />
+<img width="1199" height="1034" alt="Image" src="https://github.com/user-attachments/assets/57d9d032-6b8f-40be-966d-1e8f36d74df8" />
 
 *Real-time AI analysis with confidence ratings and reasoning*
 
 ### **📊 Live Market Charts**
-![Live Candlestick Charts]_<img width="1186" height="466" alt="Image" src="https://github.com/user-attachments/assets/925033ac-5ccc-4edc-824b-b0e34d3d6f24" />
+<img width="1186" height="466" alt="Image" src="https://github.com/user-attachments/assets/925033ac-5ccc-4edc-824b-b0e34d3d6f24" />
 *Professional-grade candlestick charts with technical indicators*
 
 ### **💰 Paper Trading Dashboard**
-![Paper Trading Interface]_<img width="1187" height="968" alt="Image" src="https://github.com/user-attachments/assets/ef963d31-b4be-4083-b308-9c4d3f88c034" />
+<img width="1187" height="968" alt="Image" src="https://github.com/user-attachments/assets/ef963d31-b4be-4083-b308-9c4d3f88c034" />
 
 *Risk-free trading simulation with real-time P&L tracking*
 
 ### **📈 Performance Analytics**
-![Performance Analytics]_<img width="693" height="456" alt="Image" src="https://github.com/user-attachments/assets/82cb796d-8726-4722-87a4-ee8d21907f15" />
+<img width="693" height="456" alt="Image" src="https://github.com/user-attachments/assets/82cb796d-8726-4722-87a4-ee8d21907f15" />
 
 *Comprehensive trading statistics and historical analysis*
 
 ### **⚙️ Configuration Panels**
-![Settings and Configuration]_ <img width="497" height="431" alt="Image" src="https://github.com/user-attachments/assets/765372f2-3e03-4a67-a8ff-14637fb5771a" />
+<img width="497" height="431" alt="Image" src="https://github.com/user-attachments/assets/765372f2-3e03-4a67-a8ff-14637fb5771a" />
 *Easy-to-use configuration for AI settings and trading parameters*
 
 ---
