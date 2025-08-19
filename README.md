@@ -89,7 +89,8 @@ python btc_terminal.py
 *Professional-grade candlestick charts with technical indicators*
 
 ### **💰 Paper Trading Dashboard**
-![Paper Trading Interface]_
+![Paper Trading Interface]_<img width="1187" height="968" alt="Image" src="https://github.com/user-attachments/assets/ef963d31-b4be-4083-b308-9c4d3f88c034" />
+
 *Risk-free trading simulation with real-time P&L tracking*
 
 ### **📈 Performance Analytics**
