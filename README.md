@@ -76,7 +76,7 @@ python btc_terminal.py
 *Witness the power of darkness in action...*
 
 ### **🖥️ Main Terminal Interface**
-![BTC Terminal Main Interface] <img width="1387" height="965" alt="Image" src="https://github.com/user-attachments/assets/284e903e-bd84-4654-b9e5-9616b2335aa6" />
+![BTC Terminal Main Interface]_<img width="1387" height="965" alt="Image" src="https://github.com/user-attachments/assets/284e903e-bd84-4654-b9e5-9616b2335aa6" />
 *The complete trading dashboard with live charts, AI predictions, and market analytics*
 
 ### **🤖 AI Prediction Engine**
