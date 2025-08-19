@@ -80,23 +80,25 @@ python btc_terminal.py
 *The complete trading dashboard with live charts, AI predictions, and market analytics*
 
 ### **🤖 AI Prediction Engine**
-![AI Prediction Engine](screenshots/ai_predictions.png)
+![AI Prediction Engine]_<img width="1199" height="1034" alt="Image" src="https://github.com/user-attachments/assets/57d9d032-6b8f-40be-966d-1e8f36d74df8" />
+
 *Real-time AI analysis with confidence ratings and reasoning*
 
 ### **📊 Live Market Charts**
-![Live Candlestick Charts](screenshots/live_charts.png)
+![Live Candlestick Charts]_<img width="1186" height="466" alt="Image" src="https://github.com/user-attachments/assets/925033ac-5ccc-4edc-824b-b0e34d3d6f24" />
 *Professional-grade candlestick charts with technical indicators*
 
 ### **💰 Paper Trading Dashboard**
-![Paper Trading Interface](screenshots/paper_trading.png)
+![Paper Trading Interface]_
 *Risk-free trading simulation with real-time P&L tracking*
 
 ### **📈 Performance Analytics**
-![Performance Analytics](screenshots/performance_stats.png)
+![Performance Analytics]_<img width="693" height="456" alt="Image" src="https://github.com/user-attachments/assets/82cb796d-8726-4722-87a4-ee8d21907f15" />
+
 *Comprehensive trading statistics and historical analysis*
 
 ### **⚙️ Configuration Panels**
-![Settings and Configuration](screenshots/config_panels.png)
+![Settings and Configuration]_ <img width="497" height="431" alt="Image" src="https://github.com/user-attachments/assets/765372f2-3e03-4a67-a8ff-14637fb5771a" />
 *Easy-to-use configuration for AI settings and trading parameters*
 
 ---
