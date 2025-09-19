@@ -1,265 +1,108 @@
-# 🌑 BTC TERMINAL
-### *Trading System*
+# Pro AI Trading Terminal
 
-```
-     ████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗ █████╗ ██╗     
-     ╚══██╔══╝██╔════╝██╔══██╗████╗ ████║██║████╗  ██║██╔══██╗██║     
-        ██║   █████╗  ██████╔╝██╔████╔██║██║██╔██╗ ██║███████║██║     
-        ██║   ██╔══╝  ██╔══██╗██║╚██╔╝██║██║██║╚██╗██║██╔══██║██║     
-        ██║   ███████╗██║  ██║██║ ╚═╝ ██║██║██║ ╚████║██║  ██║███████╗
-        ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝
-                            
-                    🔮 Where Shadows Meet Intelligence 🔮
-```
+A sophisticated, GUI-based paper trading terminal for simulating cryptocurrency (BTC/USDT) trading strategies. This application leverages a local AI engine with an advanced rule-based system and offers the capability to integrate with Google's Gemini AI for generating trading signals.
 
----
+![Pro AI Trading Terminal Screenshot](https://i.imgur.com/your-screenshot.png) *(Note: Replace with an actual screenshot of the application)*
 
-## 🌒 **ABOUT THE TERMINAL**
+## 🚀 Features
 
-In the depths of the abyss, where shadows dance with volatility, emerges the **BTC Terminal** - a tool forged for those who walk the dark path of trading mastery. in the realm of dominance.
+*   **Multiple Operating Modes**:
+    *   **Data Collection**: Gathers and logs simulated market data for analysis.
+    *   **AI Prediction**: Generates real-time trading signals (BUY CALL/BUY PUT/HOLD) without executing trades.
+    *   **Paper Trading**: Automatically executes simulated trades based on AI signals, managing a virtual portfolio.
+*   **Advanced AI Engine**:
+    *   **Sophisticated Rules Engine**: A built-in, score-based system that analyzes multiple technical indicators (MACD, RSI, ADX, Moving Averages) to produce high-quality trading signals.
+    *   **Gemini AI Integration (Simulated)**: Features a robust simulation of calls to the Gemini AI, complete with dynamically generated, expert-level prompts. It is designed for easy integration with a real Gemini API key.
+*   **Comprehensive GUI**:
+    *   **Live Candlestick Chart**: Visualizes simulated BTC/USDT price action.
+    *   **Real-time Market Dashboard**: Displays the current price, price change, and key technical indicator values.
+    *   **AI Signal Panel**: Clearly shows the latest AI-generated signal, confidence level, and reasoning.
+    *   **Live Performance Tracking**: Monitors and displays session-based trading performance, including wins, losses, win rate, and net P&L.
+*   **Paper Trading and Risk Management**:
+    *   Configure your virtual balance, risk-per-trade percentage, and asset payout percentage.
+    *   Automatic calculation of trade size and potential profit/loss.
+*   **Data Logging and Export**:
+    *   Automatically logs all generated market data and trade history to CSV files.
+    *   Functionality to export the complete trade history for external analysis.
+*   **Secure API Key Management**:
+    *   A secure, user-friendly interface for managing your Google Gemini API key, which is stored locally in an encoded format.
 
-Born from the fusion of ancient trading wisdom and cutting-edge AI sorcery, this terminal serves those brave enough to command the shadows of the market.
+## 🛠️ Getting Started
 
----
+### Prerequisites
 
-## ⚡ **DARK POWERS UNLEASHED**
+*   Python 3.8 or higher
+*   Required Python libraries:
+    *   pandas
+    *   numpy
 
-### 🔥 **Core Arsenal**
-- **Shadow AI Engine**: Dual-mode intelligence system (Rules Engine + Gemini AI)
-- **Real-time Market Surveillance**: Live candlestick charts with shadow indicators
-- **Paper Trading Simulation**: Practice your dark arts without risking real treasure
-- **Performance Analytics**: Track your victories and learn from defeats
-- **Multi-Modal Operations**: Data Collection, AI Prediction, Paper Trading
+### Installation
 
-### 🎯 **Shadow Features**
-- **Gemini AI Integration**: Harness the power of Google's AI for market predictions
-- **Advanced Technical Analysis**: RSI, ADX, MACD, Moving Averages
-- **Automated Trading Signals**: Let the shadows guide your decisions
-- **Risk Management**: Built-in position sizing and stop-loss mechanisms
-- **Historical Data Export**: CSV exports for deeper shadow analysis
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/your-username/pro-ai-trading-terminal.git
+    cd pro-ai-trading-terminal
+    ```
 
-### 🌙 **The Three Paths**
-1. **📊 Data Collection Mode**: Gather market intelligence in silence
-2. **🤖 AI Prediction Mode**: Unleash AI-powered market insights  
-3. **💰 Paper Trading Mode**: Execute shadow trades with virtual capital
+2.  **Install the required libraries:**
+    ```bash
+    pip install pandas numpy
+    ```
 
----
+3.  **Run the application:**
+    ```bash
+    python your_script_name.py
+    ```
+    *(Note: Replace `your_script_name.py` with the actual name of the Python file.)*
 
-## 🗡️ **INSTALLATION RITUAL**
+### Configuration
 
-### **Prerequisites** *(Gather Your Tools)*
-```bash
-Python 3.8+
-```
+*   **Gemini AI API Key (Optional)**:
+    1.  On the application's top menu, navigate to `Settings > Configure Gemini AI API`.
+    2.  A dialog box will appear with instructions on how to obtain a free Google Gemini API key.
+    3.  Paste your key into the provided field and click "Save & Close".
+    4.  If no API key is provided, the terminal will default to using its advanced internal Rules Engine.
 
-### **Required Dependencies** *(Summon the Libraries)*
-```bash
-pip install tkinter pandas numpy threading datetime
-```
+## 🕹️ How to Use
 
-### **Optional Power-Ups** *(Enhance Your Arsenal)*
-```bash
-pip install google-generativeai  # For real Gemini AI integration
-```
+1.  **Launch the Application**: Run the main Python script.
 
-### **Awakening the Terminal**
-```bash
-git clone <repository-url>
-cd btc-terminal
-python btc_terminal.py
-```
+2.  **Select an Operating Mode**:
+    *   **Data Collection**: To simply observe and log the simulated market data.
+    *   **AI Prediction**: To see the AI signals and reasoning without any financial impact.
+    *   **Paper Trading**: To have the application automatically execute trades on a virtual balance based on the AI signals.
 
----
+3.  **Configure Paper Trading (if applicable)**:
+    *   In the "Paper Trading Controls" panel, set your desired starting balance, risk percentage per trade, and the payout percentage for a winning trade.
 
-## 📸 **SHADOW GALLERY**
+4.  **Start the Automation**:
+    *   Click the "▶️ Start Automation" button to begin the market simulation and AI analysis. The button will change to "⏹️ Stop..." indicating that the simulation is active.
 
-*Witness the power of darkness in action...*
+5.  **Monitor Performance**:
+    *   Observe the live chart, dashboard, and AI signals.
+    *   Track the results of your trading session in the "Performance" tab.
 
-### **🖥️ Main Terminal Interface**
-<img width="1387" height="965" alt="Image" src="https://github.com/user-attachments/assets/284e903e-bd84-4654-b9e5-9616b2335aa6" />
-*The complete trading dashboard with live charts, AI predictions, and market analytics*
+6.  **Stop the Automation**:
+    *   Click the "⏹️ Stop..." button to pause the simulation. Session trade data will be automatically appended to the `trade_log.csv` file upon closing the application.
 
-### **🤖 AI Prediction Engine**
-<img width="1199" height="1034" alt="Image" src="https://github.com/user-attachments/assets/57d9d032-6b8f-40be-966d-1e8f36d74df8" />
+## Operating Modes Explained
 
-*Real-time AI analysis with confidence ratings and reasoning*
+*   ### **Data Collection**
+    In this mode, the terminal focuses solely on generating and logging simulated market data and technical indicators into `market_data_log.csv`. No AI predictions are made, making it ideal for data gathering and analysis.
 
-### **📊 Live Market Charts**
-<img width="1186" height="466" alt="Image" src="https://github.com/user-attachments/assets/925033ac-5ccc-4edc-824b-b0e34d3d6f24" />
-*Professional-grade candlestick charts with technical indicators*
+*   ### **AI Prediction**
+    This mode activates the AI Engine to analyze the market data in real-time. It will display "BUY CALL", "BUY PUT", or "HOLD" signals along with the reasoning and confidence level, but will not execute any trades. This is useful for evaluating the AI's performance without risk.
 
-### **💰 Paper Trading Dashboard**
-<img width="1187" height="968" alt="Image" src="https://github.com/user-attachments/assets/ef963d31-b4be-4083-b308-9c4d3f88c034" />
+*   ### **Paper Trading**
+    The most advanced mode. It uses the AI's signals to automatically execute trades against a virtual account balance. The system uses your predefined risk management settings to calculate trade sizes and tracks the profit and loss from each trade, providing a realistic simulation of automated trading.
 
-*Risk-free trading simulation with real-time P&L tracking*
+## Technical Details
 
-### **📈 Performance Analytics**
-<img width="693" height="456" alt="Image" src="https://github.com/user-attachments/assets/82cb796d-8726-4722-87a4-ee8d21907f15" />
-
-*Comprehensive trading statistics and historical analysis*
-
-### **⚙️ Configuration Panels**
-<img width="497" height="431" alt="Image" src="https://github.com/user-attachments/assets/765372f2-3e03-4a67-a8ff-14637fb5771a" />
-*Easy-to-use configuration for AI settings and trading parameters*
-
----
-
-## ⚔️ **COMMANDING THE SHADOWS**
-
-### **🔑 AI Configuration**
-1. Navigate to `Settings > Configure Gemini AI API`
-2. Obtain your API key from [Google AI Studio](https://makersuite.google.com/app/apikey)
-3. Enter your key to unlock true AI power
-4. Without API key, the terminal operates with the **Enhanced Rules Engine**
-
-### **🎮 Operating Modes**
-
-#### **📈 Data Collection**
-- Pure market surveillance
-- No trading signals generated
-- Perfect for building historical datasets
-
-#### **🧠 AI Prediction** 
-- Generate buy/sell signals
-- Real-time market analysis
-- Confidence ratings on all predictions
-
-#### **💸 Paper Trading**
-- Automated trade execution simulation
-- Configurable risk parameters
-- Real-time P&L tracking
-
-### **⚙️ Shadow Settings**
-```
-Paper Balance: Starting virtual capital
-Risk Per Trade: Percentage of balance at risk
-Win Payout: Return percentage on successful trades
-```
+*   **Market Data Simulation**: The application does not connect to a live market feed. Instead, it generates a continuous stream of simulated price data using a combination of sine waves and random noise to create realistic-seeming market movements. All technical indicators are calculated based on this simulated data.
+*   **AI Engine Logic**:
+    *   The **Rules Engine** uses a scoring system. It evaluates conditions across MACD, RSI, ADX, and Moving Averages. Bullish or bearish points are awarded for each condition met. A signal is generated only if a cumulative score threshold is passed, ensuring higher-quality signals.
+    *   The **Gemini AI Simulation** constructs a detailed, expert-level prompt containing the latest market data and technical indicators. While the provided code simulates the response for demonstration, it is designed to be a plug-and-play component for a real API call.
 
 ---
 
-## 🌟 **TECHNICAL SPECIFICATIONS**
-
-### **Market Intelligence**
-- **Candle Interval**: 5-second updates
-- **Indicators**: RSI(14), ADX(14), MACD, MA(20), MA(100)
-- **Chart History**: Last 100 candles retained
-- **Price Simulation**: Realistic BTC/USDT price movements
-
-### **AI Engine Architecture**
-```
-AIEngine
-├── Rules-Based Predictions (Enhanced Scoring System)
-├── Gemini AI Integration (Simulated)
-├── Rate Limiting (60 requests/minute)
-└── Fallback Mechanisms
-```
-
-### **Data Persistence**
-- `trade_log.csv`: Complete trading history
-- `market_data_log.csv`: Historical market data
-- `paper_trading_config.json`: Trading preferences
-- `api_config.json`: Encrypted API credentials
-
----
-
-## 🔮 **SHADOW ANALYTICS**
-
-### **Performance Metrics**
-- **Win Rate**: Percentage of successful predictions
-- **Net P&L**: Total profit/loss tracking
-- **Trade Statistics**: Wins, losses, accuracy ratings
-- **Historical Analysis**: Full session and persistent logs
-
-### **Risk Management**
-- **Position Sizing**: Automatic trade size calculation
-- **Balance Protection**: Configurable risk percentages
-- **Stop-Loss Logic**: Built-in trade expiration system
-
----
-
-## 🌑 **THE SHADOW'S WHISPER**
-
-*"In the realm where numbers dance with destiny, the BTC Terminal stands as your faithful shadow slave. It sees what others cannot, predicts what others fear to imagine, and executes with the precision of darkness itself."*
-
-### **Master's Commands**
-- `▶️ Start Automation`: Begin the shadow's work
-- `⏹️ Stop`: Halt all operations
-- `📄 Export History`: Extract your battle records
-- `🔑 API Config`: Empower your shadow with AI
-
----
-
-## ⚠️ **SHADOW WARNINGS**
-
-- **Simulation Only**: This terminal uses simulated BTC prices
-- **Educational Purpose**: Not financial advice - trade at your own risk
-- **API Limits**: Gemini AI has usage restrictions
-- **Data Integrity**: Always backup your trading logs
-
----
-
-## 🔧 **SHADOW CUSTOMIZATION**
-
-### **Extending the Darkness**
-```python
-# Modify the AIEngine class for custom strategies
-class AIEngine:
-    def _get_rules_based_prediction(self, data):
-        # Add your custom indicators here
-        # Implement your shadow strategies
-        pass
-```
-
-### **Visual Themes**
-The terminal uses a dark theme optimized for:
-- Reduced eye strain during long trading sessions
-- Professional trading environment aesthetics
-- Clear data visualization in low-light conditions
-
----
-
-## 📜 **SHADOW LOGS**
-
-All activities are automatically logged:
-```
-[2025-01-XX XX:XX:XX] - INFO - AI Engine initialized.
-[2025-01-XX XX:XX:XX] - INFO - Switched to AI Prediction mode.
-[2025-01-XX XX:XX:XX] - WARNING - Gemini API limit reached. Switching to Rules Engine.
-[2025-01-XX XX:XX:XX] - INFO - TRADE EXECUTED: BUY CALL at $60,123.45
-```
-
----
-
-## 🌙 **EMBRACE THE SHADOWS**
-
-The BTC Terminal awaits your command. Step into the darkness, harness the power of AI-driven market analysis, and let your shadow slave guide you through the treacherous waters of cryptocurrency trading.
-
-*Remember: In the world of shadows, knowledge is power, and power is profit.*
-
----
-
-### 🔗 **Shadow Links**
-- **Documentation**: Embedded within the terminal
-- **Support**: Check the Help menu
-- **Updates**: Monitor the repository for enhancements
-
----
-
-**⚡ Ready to command the shadows? Launch your BTC Terminal now. ⚡**
-
-```bash
-python btc_terminal.py
-```
-
-*May the shadows be ever in your favor...*
-
----
-
-<div align="center">
-
-**🌑 BTC TERMINAL - WHERE DARKNESS MEETS INTELLIGENCE 🌑**
-
-*v17.0 Enhanced AI Engine*
-
-</div>
+*This project is for educational and simulation purposes only and should not be used for live trading with real money.*
